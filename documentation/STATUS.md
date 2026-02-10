@@ -53,7 +53,7 @@ Next.js 16 with Tailwind v4, FRED-inspired design, Solana wallet integration.
 | Landing | `/` | DONE — Hero, "How It Works" cards, featured markets placeholder |
 | Markets List | `/markets` | DONE — Status filter tabs, MarketCard grid (mock data) |
 | Market Detail | `/markets/[id]` | DONE — Info card, outcome bars, order book/chart placeholders |
-| Create Market | `/create` | DONE — Form skeleton (not wired to program yet) |
+| Create Market | `/create` | DONE — Template grid (6 templates, 4 categories) → pre-filled review form |
 | Portfolio | `/portfolio` | DONE — Wallet-gated, placeholder sections |
 
 **Key tech decisions:**
@@ -75,16 +75,18 @@ frontend/src/
 │   ├── globals.css         # Tailwind v4 @theme with FRED design tokens
 │   ├── markets/page.tsx    # Markets list
 │   ├── markets/[id]/page.tsx # Market detail
-│   ├── create/page.tsx     # Create market form
+│   ├── create/page.tsx     # Create market (template grid → pre-filled form)
 │   └── portfolio/page.tsx  # User portfolio
 ├── components/
+│   ├── create/             # TemplateCard, TemplateGrid, CreateMarketForm
 │   ├── layout/             # Header, Footer, NavLink
 │   ├── market/             # MarketCard, MarketStatusBadge, OutcomeBar
 │   ├── wallet/             # WalletButton (dynamic import, SSR-safe)
 │   └── ui/                 # Card, Button, PageHeader
+├── data/                   # marketTemplates.ts (6 templates, category metadata)
 ├── providers/              # SolanaProvider, AnchorProvider (context + hook)
 ├── lib/                    # constants, utils, api client, PDA derivation helpers
-├── types/                  # Frontend-friendly Market interfaces
+├── types/                  # market.ts, template.ts (on-chain type mirrors)
 └── idl/                    # fred_markets.json (copied from contract build)
 ```
 
@@ -253,3 +255,58 @@ Fees are collected exclusively in `claim_winnings`. `place_order` is fee-free. T
 | 14 | `cancel_market` | 5 | Admin cancellation. Pending → Cancelled (no orders). Active/Closed → Cancelled. |
 | 15 | `expire_market` | 5 | Permissionless: if resolves_at + 7d passed without resolution, set Expired. |
 | 16 | `clear_order_book` | 5 | Permissionless cranker: return escrowed funds from resolved/cancelled/expired market. |
+
+---
+
+## Next Steps (Recommended Order)
+
+### 1. Smart Contract — Phase 2: Token Operations
+**Priority: HIGH** — Everything downstream depends on minting/redeeming tokens.
+
+- `mint_complete_set` — Deposit USDC to vault, mint 1 of each outcome token to user. Must check `initialized_outcomes == num_outcomes * 2`. Handle creator's pre-deposited stake from `claim_market`.
+- `redeem_complete_set` — Burn 1 of each outcome token, return USDC from vault. Block in `Pending` or `Resolved` status.
+
+### 2. Smart Contract — Phase 3: Order Book
+**Priority: HIGH** — Core trading functionality.
+
+- `place_order` — Most complex instruction. Matching engine with capped fills per tx, USDC/token escrow, fill events. Needs careful compute budget management.
+- `cancel_order` — Return escrowed funds, clear slot in order book array.
+
+### 3. Smart Contract — Phase 4: Market Lifecycle
+**Priority: MEDIUM** — Resolution and payout flow.
+
+- `close_market` — Permissionless cranker, time-based.
+- `resolve_market` — Oracle sets winning outcome.
+- `claim_winnings` — Burn winning tokens, payout minus fee split (60% creator, 30% treasury, 10% reserve).
+- `claim_creator_fees` — Creator withdraws accumulated fees from vault.
+
+### 4. Smart Contract — Phase 5: Safety
+**Priority: MEDIUM** — Edge cases and cleanup.
+
+- `cancel_market`, `expire_market`, `clear_order_book`
+
+### 5. TypeScript Tests
+**Priority: HIGH (parallel with Phases 2-5)** — Write tests for each instruction as it's built. Use `anchor test` with local validator.
+
+### 6. Frontend — Wire to On-Chain
+**Priority: AFTER Phase 2+3** — Once minting and trading work:
+
+- Wire Create Market form to `propose_market` instruction (template → tx)
+- Wire Markets list to on-chain `program.account.market.all()` or backend indexer
+- Wire Market Detail to real order book data
+- Wire Portfolio to user's token balances and open orders
+
+### 7. Backend — On-Chain Indexer
+**Priority: AFTER Phase 3** — Sync on-chain state to PostgreSQL:
+
+- Listener/poller for market account changes
+- Index order book state for faster queries
+- Historical trade data for charts
+
+### 8. Deployment & DevOps
+**Priority: LAST**
+
+- Deploy contract to devnet
+- Host backend (Docker on VPS or Railway/Render)
+- Host frontend (Vercel)
+- CI/CD pipeline
