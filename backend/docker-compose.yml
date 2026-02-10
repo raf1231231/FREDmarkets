@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: fredmarkets
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: fredmarkets
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build: .
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+    environment:
+      PORT: 3001
+      DATABASE_URL: postgresql://fredmarkets:password@db:5432/fredmarkets
+      FRED_API_KEY: ${FRED_API_KEY}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
+      NODE_ENV: production
+
+volumes:
+  pgdata:

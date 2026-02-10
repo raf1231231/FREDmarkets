@@ -1,0 +1,2085 @@
+{
+  "address": "GaK745UiF6FMZt5hXbCrKQrhmdcmRx8SYi3AdfFshMBo",
+  "metadata": {
+    "name": "fred_markets",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "FREDmarkets prediction market platform on Solana"
+  },
+  "instructions": [
+    {
+      "name": "claim_market",
+      "docs": [
+        "Claims a pending market. Creates vault + creator config, sets Active."
+      ],
+      "discriminator": [
+        25,
+        47,
+        246,
+        176,
+        115,
+        160,
+        184,
+        167
+      ],
+      "accounts": [
+        {
+          "name": "creator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "platform_config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  116,
+                  102,
+                  111,
+                  114,
+                  109,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "market",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "market.market_id",
+                "account": "Market"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_mint",
+          "docs": [
+            "USDC mint"
+          ]
+        },
+        {
+          "name": "creator_usdc_account",
+          "docs": [
+            "Creator's USDC token account"
+          ],
+          "writable": true
+        },
+        {
+          "name": "vault",
+          "docs": [
+            "PDA-owned vault token account"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "market"
+              }
+            ]
+          }
+        },
+        {
+          "name": "creator_config",
+          "docs": [
+            "Creator config PDA"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  114,
+                  101,
+                  97,
+                  116,
+                  111,
+                  114,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "market"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "params",
+          "type": {
+            "defined": {
+              "name": "ClaimMarketParams"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "initialize_order_book",
+      "docs": [
+        "Initializes an order book for a specific outcome index."
+      ],
+      "discriminator": [
+        93,
+        233,
+        9,
+        128,
+        33,
+        199,
+        152,
+        88
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "market",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "market.market_id",
+                "account": "Market"
+              }
+            ]
+          }
+        },
+        {
+          "name": "order_book",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "outcome_index",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "initialize_outcome_mint",
+      "docs": [
+        "Initializes an outcome token mint for a specific outcome index."
+      ],
+      "discriminator": [
+        17,
+        129,
+        120,
+        1,
+        210,
+        162,
+        52,
+        140
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "market",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "market.market_id",
+                "account": "Market"
+              }
+            ]
+          }
+        },
+        {
+          "name": "outcome_mint",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "outcome_index",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "initialize_platform",
+      "docs": [
+        "Initializes the platform configuration singleton. One-time setup."
+      ],
+      "discriminator": [
+        119,
+        201,
+        101,
+        45,
+        75,
+        122,
+        89,
+        3
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "platform_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  116,
+                  102,
+                  111,
+                  114,
+                  109,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "params",
+          "type": {
+            "defined": {
+              "name": "InitializePlatformParams"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "propose_market",
+      "docs": [
+        "Proposes a new prediction market. Creates Market PDA with Pending status."
+      ],
+      "discriminator": [
+        39,
+        201,
+        255,
+        2,
+        194,
+        181,
+        58,
+        105
+      ],
+      "accounts": [
+        {
+          "name": "proposer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "platform_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  116,
+                  102,
+                  111,
+                  114,
+                  109,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "market",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "platform_config.total_markets_created",
+                "account": "PlatformConfig"
+              }
+            ]
+          }
+        },
+        {
+          "name": "treasury",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "params",
+          "type": {
+            "defined": {
+              "name": "ProposeMarketParams"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Market",
+      "discriminator": [
+        219,
+        190,
+        213,
+        55,
+        0,
+        227,
+        198,
+        154
+      ]
+    },
+    {
+      "name": "MarketCreatorConfig",
+      "discriminator": [
+        185,
+        222,
+        59,
+        183,
+        198,
+        64,
+        34,
+        133
+      ]
+    },
+    {
+      "name": "OrderBook",
+      "discriminator": [
+        55,
+        230,
+        125,
+        218,
+        149,
+        39,
+        65,
+        248
+      ]
+    },
+    {
+      "name": "PlatformConfig",
+      "discriminator": [
+        160,
+        78,
+        128,
+        0,
+        248,
+        83,
+        230,
+        160
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "CreatorFeesClaimed",
+      "discriminator": [
+        189,
+        178,
+        21,
+        181,
+        171,
+        179,
+        131,
+        1
+      ]
+    },
+    {
+      "name": "MarketCancelledEvent",
+      "discriminator": [
+        216,
+        244,
+        148,
+        122,
+        217,
+        220,
+        248,
+        188
+      ]
+    },
+    {
+      "name": "MarketClaimed",
+      "discriminator": [
+        180,
+        162,
+        75,
+        127,
+        168,
+        14,
+        84,
+        89
+      ]
+    },
+    {
+      "name": "MarketClosed",
+      "discriminator": [
+        86,
+        91,
+        119,
+        43,
+        94,
+        0,
+        217,
+        113
+      ]
+    },
+    {
+      "name": "MarketExpired",
+      "discriminator": [
+        228,
+        124,
+        242,
+        206,
+        11,
+        206,
+        69,
+        177
+      ]
+    },
+    {
+      "name": "MarketProposed",
+      "discriminator": [
+        241,
+        200,
+        151,
+        120,
+        229,
+        7,
+        131,
+        124
+      ]
+    },
+    {
+      "name": "MarketResolved",
+      "discriminator": [
+        89,
+        67,
+        230,
+        95,
+        143,
+        106,
+        199,
+        202
+      ]
+    },
+    {
+      "name": "OrderBookCleared",
+      "discriminator": [
+        3,
+        34,
+        212,
+        222,
+        205,
+        0,
+        3,
+        88
+      ]
+    },
+    {
+      "name": "OrderCancelled",
+      "discriminator": [
+        108,
+        56,
+        128,
+        68,
+        168,
+        113,
+        168,
+        239
+      ]
+    },
+    {
+      "name": "OrderFilled",
+      "discriminator": [
+        120,
+        124,
+        109,
+        66,
+        249,
+        116,
+        174,
+        30
+      ]
+    },
+    {
+      "name": "OrderPlaced",
+      "discriminator": [
+        96,
+        130,
+        204,
+        234,
+        169,
+        219,
+        216,
+        227
+      ]
+    },
+    {
+      "name": "SetsMinted",
+      "discriminator": [
+        200,
+        249,
+        118,
+        195,
+        108,
+        39,
+        148,
+        104
+      ]
+    },
+    {
+      "name": "SetsRedeemed",
+      "discriminator": [
+        240,
+        142,
+        107,
+        10,
+        43,
+        170,
+        242,
+        78
+      ]
+    },
+    {
+      "name": "WinningsClaimed",
+      "discriminator": [
+        187,
+        184,
+        29,
+        196,
+        54,
+        117,
+        70,
+        150
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "PlatformPaused",
+      "msg": "Platform is paused"
+    },
+    {
+      "code": 6001,
+      "name": "FeeSharesMustSumTo10000",
+      "msg": "Fee shares must sum to 10000 basis points"
+    },
+    {
+      "code": 6002,
+      "name": "MarketNotPending",
+      "msg": "Market is not in Pending status"
+    },
+    {
+      "code": 6003,
+      "name": "MarketNotActive",
+      "msg": "Market is not in Active status"
+    },
+    {
+      "code": 6004,
+      "name": "MarketNotClosed",
+      "msg": "Market is not in Closed status"
+    },
+    {
+      "code": 6005,
+      "name": "MarketNotResolved",
+      "msg": "Market is not in Resolved status"
+    },
+    {
+      "code": 6006,
+      "name": "MarketAlreadyClaimed",
+      "msg": "Market has already been claimed"
+    },
+    {
+      "code": 6007,
+      "name": "MarketAlreadyResolved",
+      "msg": "Market has already been resolved"
+    },
+    {
+      "code": 6008,
+      "name": "BettingClosed",
+      "msg": "Betting is closed — current time is past closes_at"
+    },
+    {
+      "code": 6009,
+      "name": "ResolutionTooEarly",
+      "msg": "Resolution too early — current time is before resolves_at"
+    },
+    {
+      "code": 6010,
+      "name": "GracePeriodNotExpired",
+      "msg": "Grace period has not expired — less than 7 days past resolves_at"
+    },
+    {
+      "code": 6011,
+      "name": "InvalidNumOutcomes",
+      "msg": "Invalid number of outcomes — must be 2 (binary) or 3–8 (multi)"
+    },
+    {
+      "code": 6012,
+      "name": "InvalidDates",
+      "msg": "Invalid dates — closes_at must be before resolves_at and both in the future"
+    },
+    {
+      "code": 6013,
+      "name": "MarketNotFullyInitialized",
+      "msg": "Market is not fully initialized — all outcome mints and order books must be created"
+    },
+    {
+      "code": 6014,
+      "name": "InvalidStatusForRedemption",
+      "msg": "Cannot redeem complete sets on a Pending or Resolved market"
+    },
+    {
+      "code": 6015,
+      "name": "InsufficientStake",
+      "msg": "Stake amount is below the platform minimum"
+    },
+    {
+      "code": 6016,
+      "name": "InvalidOdds",
+      "msg": "Initial odds are invalid — must sum to 10000 for active outcomes"
+    },
+    {
+      "code": 6017,
+      "name": "CreatorPositionsLocked",
+      "msg": "Creator positions are locked until the lock period expires"
+    },
+    {
+      "code": 6018,
+      "name": "NoFeesToClaim",
+      "msg": "No accumulated fees to claim"
+    },
+    {
+      "code": 6019,
+      "name": "InvalidOrderPrice",
+      "msg": "Order price must be between 1 and 9999 basis points"
+    },
+    {
+      "code": 6020,
+      "name": "InsufficientAmount",
+      "msg": "Order amount is below the platform minimum"
+    },
+    {
+      "code": 6021,
+      "name": "InsufficientBalance",
+      "msg": "Insufficient token or USDC balance"
+    },
+    {
+      "code": 6022,
+      "name": "OrderBookFull",
+      "msg": "Order book is full — maximum open orders reached"
+    },
+    {
+      "code": 6023,
+      "name": "OrderNotFound",
+      "msg": "Order not found"
+    },
+    {
+      "code": 6024,
+      "name": "UnauthorizedCancellation",
+      "msg": "Only the order maker can cancel this order"
+    },
+    {
+      "code": 6025,
+      "name": "IncompleteSet",
+      "msg": "Incomplete set — need 1 token of each outcome to redeem"
+    },
+    {
+      "code": 6026,
+      "name": "UnauthorizedOracle",
+      "msg": "Unauthorized oracle — signer does not match oracle_authority"
+    },
+    {
+      "code": 6027,
+      "name": "InvalidWinningOutcome",
+      "msg": "Invalid winning outcome — must be less than num_outcomes"
+    },
+    {
+      "code": 6028,
+      "name": "InvalidOutcome",
+      "msg": "Invalid outcome index — must be less than num_outcomes"
+    },
+    {
+      "code": 6029,
+      "name": "InvalidTreasury",
+      "msg": "Treasury account does not match platform config"
+    },
+    {
+      "code": 6030,
+      "name": "MathOverflow",
+      "msg": "Math overflow"
+    }
+  ],
+  "types": [
+    {
+      "name": "ClaimMarketParams",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "stake_amount",
+            "type": "u64"
+          },
+          {
+            "name": "initial_odds",
+            "type": {
+              "array": [
+                "u16",
+                8
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Comparison",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "GreaterThan"
+          },
+          {
+            "name": "GreaterThanOrEqual"
+          },
+          {
+            "name": "LessThan"
+          },
+          {
+            "name": "LessThanOrEqual"
+          },
+          {
+            "name": "Equal"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ConditionType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "ThresholdAbove"
+          },
+          {
+            "name": "ThresholdBelow"
+          },
+          {
+            "name": "ExactRange"
+          },
+          {
+            "name": "ChangePercent"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreatorFeesClaimed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market_id",
+            "type": "u64"
+          },
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InitializePlatformParams",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "oracle_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "treasury",
+            "type": "pubkey"
+          },
+          {
+            "name": "reserve",
+            "type": "pubkey"
+          },
+          {
+            "name": "fee_bps",
+            "type": "u16"
+          },
+          {
+            "name": "creator_fee_share_bps",
+            "type": "u16"
+          },
+          {
+            "name": "treasury_fee_share_bps",
+            "type": "u16"
+          },
+          {
+            "name": "reserve_fee_share_bps",
+            "type": "u16"
+          },
+          {
+            "name": "min_stake_amount",
+            "type": "u64"
+          },
+          {
+            "name": "creator_lock_period",
+            "type": "i64"
+          },
+          {
+            "name": "min_order_amount",
+            "type": "u64"
+          },
+          {
+            "name": "market_creation_fee",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Market",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market_id",
+            "docs": [
+              "Unique sequential market ID"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "proposer",
+            "docs": [
+              "Who proposed the market"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "fred_series_id",
+            "docs": [
+              "FRED series ID, padded to 32 bytes"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "title",
+            "docs": [
+              "Human-readable title, padded to 128 bytes"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                128
+              ]
+            }
+          },
+          {
+            "name": "description",
+            "docs": [
+              "Description, padded to 512 bytes"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                512
+              ]
+            }
+          },
+          {
+            "name": "market_type",
+            "docs": [
+              "Binary or MultiOutcome"
+            ],
+            "type": {
+              "defined": {
+                "name": "MarketType"
+              }
+            }
+          },
+          {
+            "name": "num_outcomes",
+            "docs": [
+              "Number of outcomes (2 for binary, 3–8 for multi)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "outcome_labels",
+            "docs": [
+              "Label per outcome, padded to 32 bytes each"
+            ],
+            "type": {
+              "array": [
+                {
+                  "array": [
+                    "u8",
+                    32
+                  ]
+                },
+                8
+              ]
+            }
+          },
+          {
+            "name": "outcome_mints",
+            "docs": [
+              "SPL token mint pubkey per outcome (Pubkey::default() for unused slots)"
+            ],
+            "type": {
+              "array": [
+                "pubkey",
+                8
+              ]
+            }
+          },
+          {
+            "name": "resolution_condition",
+            "docs": [
+              "Machine-readable resolution condition"
+            ],
+            "type": {
+              "defined": {
+                "name": "ResolutionCondition"
+              }
+            }
+          },
+          {
+            "name": "resolution_source_url",
+            "docs": [
+              "FRED URL for verification, padded to 128 bytes"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                128
+              ]
+            }
+          },
+          {
+            "name": "token_mint",
+            "docs": [
+              "USDC mint address"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "vault",
+            "docs": [
+              "PDA-owned USDC vault token account"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "total_sets_minted",
+            "docs": [
+              "Complete sets currently in circulation (USDC base units)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "status",
+            "docs": [
+              "Current market lifecycle status"
+            ],
+            "type": {
+              "defined": {
+                "name": "MarketStatus"
+              }
+            }
+          },
+          {
+            "name": "winning_outcome",
+            "docs": [
+              "Set on resolution — index of winning outcome"
+            ],
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "resolution_value",
+            "docs": [
+              "FRED value × 10000 at resolution"
+            ],
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "resolution_timestamp",
+            "docs": [
+              "Timestamp when FRED data was observed"
+            ],
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "created_at",
+            "docs": [
+              "Unix timestamp of market creation"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "closes_at",
+            "docs": [
+              "Trading cutoff timestamp"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "resolves_at",
+            "docs": [
+              "Expected resolution date"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "resolved_at",
+            "docs": [
+              "Actual resolution timestamp"
+            ],
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "initialized_outcomes",
+            "docs": [
+              "Number of initialized outcome mints + order books (target = num_outcomes * 2)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump seed"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketCancelledEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market_id",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketClaimed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market_id",
+            "type": "u64"
+          },
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "stake_amount",
+            "type": "u64"
+          },
+          {
+            "name": "initial_odds",
+            "type": {
+              "array": [
+                "u16",
+                8
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketClosed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market_id",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketCreatorConfig",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market",
+            "docs": [
+              "Associated market pubkey"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "creator",
+            "docs": [
+              "Creator wallet"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "stake_amount",
+            "docs": [
+              "USDC deposited when claiming (base units)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "initial_odds",
+            "docs": [
+              "Initial odds in basis points per outcome (sum to 10000 for active outcomes)"
+            ],
+            "type": {
+              "array": [
+                "u16",
+                8
+              ]
+            }
+          },
+          {
+            "name": "fee_share_bps",
+            "docs": [
+              "Creator's fee share in basis points (copied from platform config at claim time)"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "accumulated_fees",
+            "docs": [
+              "Unclaimed fee revenue in USDC base units"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "locked_until",
+            "docs": [
+              "Creator can't sell positions before this timestamp"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump seed"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketExpired",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market_id",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketProposed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market_id",
+            "type": "u64"
+          },
+          {
+            "name": "proposer",
+            "type": "pubkey"
+          },
+          {
+            "name": "fred_series_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "market_type",
+            "type": "u8"
+          },
+          {
+            "name": "num_outcomes",
+            "type": "u8"
+          },
+          {
+            "name": "closes_at",
+            "type": "i64"
+          },
+          {
+            "name": "resolves_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketResolved",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market_id",
+            "type": "u64"
+          },
+          {
+            "name": "winning_outcome",
+            "type": "u8"
+          },
+          {
+            "name": "resolution_value",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketStatus",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Pending"
+          },
+          {
+            "name": "Active"
+          },
+          {
+            "name": "Closed"
+          },
+          {
+            "name": "Resolved"
+          },
+          {
+            "name": "Cancelled"
+          },
+          {
+            "name": "Expired"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Binary"
+          },
+          {
+            "name": "MultiOutcome"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Order",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "maker",
+            "docs": [
+              "Maker's wallet pubkey (32 bytes)"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "price_bps",
+            "docs": [
+              "Price in basis points (1–9999)"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "_padding",
+            "docs": [
+              "Padding for alignment"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                6
+              ]
+            }
+          },
+          {
+            "name": "amount",
+            "docs": [
+              "Total outcome tokens in the order (base units)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "filled_amount",
+            "docs": [
+              "Tokens already filled (base units)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "order_id",
+            "docs": [
+              "Unique order ID within this book"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "created_at",
+            "docs": [
+              "Unix timestamp of order creation"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "active",
+            "docs": [
+              "Whether the order is still active (1 = active, 0 = inactive)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "_padding2",
+            "docs": [
+              "Padding for alignment"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                7
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "OrderBook",
+      "serialization": "bytemuck",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market",
+            "docs": [
+              "Associated market pubkey"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "outcome_index",
+            "docs": [
+              "Which outcome this order book is for"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "_padding0",
+            "docs": [
+              "Padding for alignment"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                7
+              ]
+            }
+          },
+          {
+            "name": "bids",
+            "docs": [
+              "Buy orders sorted by price descending"
+            ],
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "Order"
+                  }
+                },
+                32
+              ]
+            }
+          },
+          {
+            "name": "asks",
+            "docs": [
+              "Sell orders sorted by price ascending"
+            ],
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "Order"
+                  }
+                },
+                32
+              ]
+            }
+          },
+          {
+            "name": "bid_count",
+            "docs": [
+              "Number of active bids"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "ask_count",
+            "docs": [
+              "Number of active asks"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "_padding1",
+            "docs": [
+              "Padding for alignment"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                6
+              ]
+            }
+          },
+          {
+            "name": "next_order_id",
+            "docs": [
+              "Global order ID counter for this book"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump seed"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "_padding2",
+            "docs": [
+              "Padding for alignment"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                7
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "OrderBookCleared",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market_id",
+            "type": "u64"
+          },
+          {
+            "name": "outcome",
+            "type": "u8"
+          },
+          {
+            "name": "orders_cleared",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "OrderCancelled",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market_id",
+            "type": "u64"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "outcome",
+            "type": "u8"
+          },
+          {
+            "name": "order_id",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "OrderFilled",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market_id",
+            "type": "u64"
+          },
+          {
+            "name": "maker",
+            "type": "pubkey"
+          },
+          {
+            "name": "taker",
+            "type": "pubkey"
+          },
+          {
+            "name": "outcome",
+            "type": "u8"
+          },
+          {
+            "name": "price_bps",
+            "type": "u16"
+          },
+          {
+            "name": "fill_amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "OrderPlaced",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market_id",
+            "type": "u64"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "outcome",
+            "type": "u8"
+          },
+          {
+            "name": "side",
+            "type": "u8"
+          },
+          {
+            "name": "price_bps",
+            "type": "u16"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "order_id",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PlatformConfig",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "docs": [
+              "Platform admin authority"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "oracle_authority",
+            "docs": [
+              "Authorized oracle signer for market resolution"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "treasury",
+            "docs": [
+              "Platform fee wallet"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "reserve",
+            "docs": [
+              "Oracle/insurance reserve wallet"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "fee_bps",
+            "docs": [
+              "Total fee in basis points (e.g., 200 = 2%)"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "creator_fee_share_bps",
+            "docs": [
+              "Creator's share of fee in basis points (e.g., 6000 = 60%)"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "treasury_fee_share_bps",
+            "docs": [
+              "Treasury's share of fee in basis points (e.g., 3000 = 30%)"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "reserve_fee_share_bps",
+            "docs": [
+              "Reserve's share of fee in basis points (e.g., 1000 = 10%)"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "min_stake_amount",
+            "docs": [
+              "Minimum USDC (base units) to claim a market"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "creator_lock_period",
+            "docs": [
+              "Seconds creator positions are locked after claiming"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "min_order_amount",
+            "docs": [
+              "Minimum token amount per order (base units)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "market_creation_fee",
+            "docs": [
+              "SOL lamports charged to propose a market (anti-spam)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "paused",
+            "docs": [
+              "Emergency pause flag"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "total_markets_created",
+            "docs": [
+              "Counter for sequential market ID generation"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump seed"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ProposeMarketParams",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "fred_series_id",
+            "type": "string"
+          },
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "name": "market_type",
+            "type": {
+              "defined": {
+                "name": "MarketType"
+              }
+            }
+          },
+          {
+            "name": "num_outcomes",
+            "type": "u8"
+          },
+          {
+            "name": "outcome_labels",
+            "type": {
+              "vec": "string"
+            }
+          },
+          {
+            "name": "resolution_condition",
+            "type": {
+              "defined": {
+                "name": "ResolutionCondition"
+              }
+            }
+          },
+          {
+            "name": "resolution_source_url",
+            "type": "string"
+          },
+          {
+            "name": "closes_at",
+            "type": "i64"
+          },
+          {
+            "name": "resolves_at",
+            "type": "i64"
+          },
+          {
+            "name": "token_mint",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ResolutionCondition",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "condition_type",
+            "docs": [
+              "Type of condition for resolution"
+            ],
+            "type": {
+              "defined": {
+                "name": "ConditionType"
+              }
+            }
+          },
+          {
+            "name": "threshold_value",
+            "docs": [
+              "Threshold value × 10000"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "comparison",
+            "docs": [
+              "Comparison operator"
+            ],
+            "type": {
+              "defined": {
+                "name": "Comparison"
+              }
+            }
+          },
+          {
+            "name": "range_low",
+            "docs": [
+              "Lower bound for range conditions × 10000"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "range_high",
+            "docs": [
+              "Upper bound for range conditions × 10000"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "range_step",
+            "docs": [
+              "Step size for range buckets × 10000"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "observation_date",
+            "docs": [
+              "Date the observation should be taken"
+            ],
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SetsMinted",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market_id",
+            "type": "u64"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "num_sets",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SetsRedeemed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market_id",
+            "type": "u64"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "num_sets",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "WinningsClaimed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "market_id",
+            "type": "u64"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "fee",
+            "type": "u64"
+          }
+        ]
+      }
+    }
+  ]
+}
