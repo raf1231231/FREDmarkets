@@ -2,6 +2,20 @@
 
 A decentralized prediction market platform built on Solana, enabling users to trade on Federal Reserve Economic Data (FRED) indicators.
 
+## Deployment Status
+
+**Current Phase**: Infrastructure Deployment
+
+- Frontend: Vercel (configuration in progress)
+- Backend: Ready to deploy to Railway
+- Database: Ready to deploy to Neon PostgreSQL
+- Smart Contract: Phase 0+1 complete (5 of 15 instructions)
+
+**Quick Links**:
+- [Deployment Guide](RAILWAY_DEPLOYMENT.md) - Complete Railway + Neon setup
+- [Deployment Checklist](DEPLOY_CHECKLIST.md) - Quick reference
+- [Project Status](PROJECT_STATUS.md) - Detailed status and metrics
+
 ## Overview
 
 FREDmarkets transforms economic data from the Federal Reserve Economic Data (FRED) database into tradable prediction markets. Users can create markets on upcoming economic releases, sponsor market potentials with initial liquidity, and trade conditional outcome tokens based on what they believe future economic indicators will reveal.
