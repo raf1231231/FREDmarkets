@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -15,7 +15,7 @@ model Market {
   fredSeriesId    String
   marketType      String // "binary" | "multiOutcome"
   numOutcomes     Int
-  outcomeLabels   String[]
+  outcomeLabels   Json // Array of outcome label strings
   status          String    @default("pending")
   proposer        String
   creator         String?
@@ -31,4 +31,14 @@ model Market {
 
   @@index([status])
   @@index([fredSeriesId])
+}
+
+model FredCache {
+  seriesId     String   @id
+  observations Json     // Array of {date, value, realtime_start, realtime_end}
+  seriesInfo   Json?    // Optional: series metadata (title, units, frequency, etc.)
+  lastFetched  DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([lastFetched])
 }

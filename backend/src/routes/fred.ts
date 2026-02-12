@@ -1,6 +1,11 @@
 import { Router } from "express";
 import rateLimit from "express-rate-limit";
-import { searchSeries, getSeries, getObservations } from "../services/fred";
+import {
+  searchSeries,
+  getSeries,
+  getObservations,
+  getBatchObservations,
+} from "../services/fred";
 
 const router = Router();
 
@@ -51,6 +56,37 @@ router.get("/observations/:seriesId", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+});
+
+router.post("/batch-observations", async (req, res, next) => {
+  try {
+    const { seriesIds, limit, frequencyMap } = req.body || {};
+    if (
+      !Array.isArray(seriesIds) ||
+      seriesIds.length === 0 ||
+      seriesIds.length > 150
+    ) {
+      res.status(400).json({
+        error: "BadRequest",
+        message: "seriesIds must be an array of 1-150 IDs",
+      });
+      return;
+    }
+    const data = await getBatchObservations(
+      seriesIds,
+      String(limit || 13),
+      frequencyMap
+    );
+    res.json(data);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Admin endpoint to view cache stats
+router.get("/cache-stats", async (req, res) => {
+  const { getCacheStats } = await import("../services/fred");
+  res.json(getCacheStats());
 });
 
 export default router;

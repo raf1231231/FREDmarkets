@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
+import EconomicDashboard from "@/components/fred/EconomicDashboard";
 
 export default function Home() {
   return (
@@ -58,14 +59,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Markets placeholder */}
+      {/* Economic Indicators */}
       <section className="pb-16">
-        <h2 className="text-xl font-semibold text-fred-navy text-center mb-8">
-          Featured Markets
+        <h2 className="text-xl font-semibold text-fred-navy text-center mb-2">
+          Economic Indicators
         </h2>
-        <div className="text-center text-sm text-fred-gray-600 py-12 border border-dashed border-fred-gray-300 rounded-[5px]">
-          No markets yet. Deploy the smart contract and create your first market.
-        </div>
+        <p className="text-sm text-fred-gray-600 text-center mb-8">
+          Live data from the Federal Reserve Economic Database
+        </p>
+        <EconomicDashboard />
       </section>
     </div>
   );

@@ -6,6 +6,8 @@ import Card from "@/components/ui/Card";
 import MarketStatusBadge from "@/components/market/MarketStatusBadge";
 import OutcomeBar from "@/components/market/OutcomeBar";
 import { shortenAddress } from "@/lib/utils";
+import FredSeriesCard from "@/components/fred/FredSeriesCard";
+import FredObservationTable from "@/components/fred/FredObservationTable";
 
 export default function MarketDetailPage({
   params,
@@ -14,7 +16,9 @@ export default function MarketDetailPage({
 }) {
   const { id } = use(params);
 
-  // Placeholder — in production this fetches from on-chain or backend API
+  // TODO: Extract fredSeriesId from on-chain market data once available
+  const fredSeriesId = "CPIAUCSL";
+
   return (
     <div>
       <PageHeader
@@ -65,11 +69,8 @@ export default function MarketDetailPage({
             </p>
           </Card>
 
-          <Card title="FRED Data">
-            <p className="text-sm text-fred-gray-600 text-center py-6">
-              Chart coming soon.
-            </p>
-          </Card>
+          <FredSeriesCard seriesId={fredSeriesId} />
+          <FredObservationTable seriesId={fredSeriesId} limit={8} />
         </div>
       </div>
     </div>

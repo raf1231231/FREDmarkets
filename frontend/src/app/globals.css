@@ -4,6 +4,7 @@
 @theme inline {
   /* Primary palette */
   --color-fred-navy: #1a2a44;
+  --color-fred-navy-light: #2d3e5f;
   --color-fred-blue: #003865;
   --color-fred-link: #1a73e8;
   --color-fred-link-hover: #1557b0;
@@ -58,4 +59,55 @@ a:hover {
 }
 .wallet-adapter-button:hover {
   background-color: var(--color-fred-link-hover) !important;
+}
+
+/* ========== Market Cloud Animations ========== */
+@keyframes cloud-float {
+  0%, 100% { transform: translate(0, 0); }
+  25%      { transform: translate(4px, -6px); }
+  50%      { transform: translate(-3px, 4px); }
+  75%      { transform: translate(5px, 2px); }
+}
+
+@keyframes cloud-float-alt {
+  0%, 100% { transform: translate(0, 0); }
+  25%      { transform: translate(-5px, 3px); }
+  50%      { transform: translate(3px, -5px); }
+  75%      { transform: translate(-2px, 6px); }
+}
+
+@keyframes cloud-enter {
+  from { opacity: 0; transform: scale(0.7) translateY(20px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes cloud-pulse {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 0.7; }
+}
+
+.cloud-card {
+  animation: cloud-float var(--cloud-duration, 8s) ease-in-out infinite;
+  animation-delay: var(--cloud-delay, 0s);
+  transition: box-shadow 0.2s, transform 0.2s;
+  will-change: transform;
+}
+
+.cloud-card:nth-child(odd) {
+  animation-name: cloud-float-alt;
+}
+
+.cloud-card:hover {
+  animation-play-state: paused;
+  transform: scale(1.08) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+.cloud-card-enter {
+  animation: cloud-enter 0.4s ease-out forwards;
+}
+
+.cloud-skeleton {
+  animation: cloud-pulse 1.5s ease-in-out infinite;
 }

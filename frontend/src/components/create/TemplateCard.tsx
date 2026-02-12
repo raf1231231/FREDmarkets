@@ -1,4 +1,5 @@
 import { MarketTemplate, DataFrequency } from "@/types/template";
+import FredLatestValue from "@/components/fred/FredLatestValue";
 
 const frequencyBadge: Record<DataFrequency, { label: string; className: string }> = {
   monthly: { label: "Monthly", className: "bg-blue-50 text-blue-700" },
@@ -23,9 +24,12 @@ export default function TemplateCard({ template, onClick }: TemplateCardProps) {
       <h3 className="text-sm font-semibold text-fred-navy leading-snug">
         {template.seriesName}
       </h3>
-      <p className="text-xs font-mono text-fred-gray-600 mb-2">
-        {template.fredSeriesId}
-      </p>
+      <div className="flex items-center gap-2 mb-2">
+        <span className="text-xs font-mono text-fred-gray-600">
+          {template.fredSeriesId}
+        </span>
+        <FredLatestValue seriesId={template.fredSeriesId} />
+      </div>
 
       <p className="text-sm text-fred-gray-800 mb-3 leading-snug">
         {template.sampleQuestion}
