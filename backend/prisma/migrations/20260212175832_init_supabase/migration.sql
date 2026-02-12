@@ -1,34 +1,38 @@
 -- CreateTable
 CREATE TABLE "Market" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL,
     "marketId" BIGINT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL DEFAULT '',
     "fredSeriesId" TEXT NOT NULL,
     "marketType" TEXT NOT NULL,
     "numOutcomes" INTEGER NOT NULL,
-    "outcomeLabels" JSONB NOT NULL,
+    "outcomeLabels" TEXT[],
     "status" TEXT NOT NULL DEFAULT 'pending',
     "proposer" TEXT NOT NULL,
     "creator" TEXT,
     "tokenMint" TEXT NOT NULL,
     "vault" TEXT,
     "totalSetsMinted" BIGINT NOT NULL DEFAULT 0,
-    "closesAt" DATETIME NOT NULL,
-    "resolvesAt" DATETIME NOT NULL,
-    "resolvedAt" DATETIME,
+    "closesAt" TIMESTAMP(3) NOT NULL,
+    "resolvesAt" TIMESTAMP(3) NOT NULL,
+    "resolvedAt" TIMESTAMP(3),
     "winningOutcome" INTEGER,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Market_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "FredCache" (
-    "seriesId" TEXT NOT NULL PRIMARY KEY,
+    "seriesId" TEXT NOT NULL,
     "observations" JSONB NOT NULL,
     "seriesInfo" JSONB,
-    "lastFetched" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "lastFetched" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "FredCache_pkey" PRIMARY KEY ("seriesId")
 );
 
 -- CreateIndex

@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Market {
@@ -15,7 +16,7 @@ model Market {
   fredSeriesId    String
   marketType      String // "binary" | "multiOutcome"
   numOutcomes     Int
-  outcomeLabels   Json // Array of outcome label strings
+  outcomeLabels   String[]
   status          String    @default("pending")
   proposer        String
   creator         String?
