@@ -1,8 +1,6 @@
 import axios from "axios";
 import { config } from "../config";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "../lib/prisma";
 
 interface CacheEntry {
   data: any;
