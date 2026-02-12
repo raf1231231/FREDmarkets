@@ -52,18 +52,18 @@ export function fetchBatchObservations(
   limit = 13,
   frequencyMap?: Record<string, string>
 ): Promise<Record<string, { observations: Array<{ date: string; value: string }> }>> {
-  console.log("📡 Fetching batch observations:", seriesIds.length, "series, limit:", limit);
-  return apiFetch(`/fred/batch-observations`, {
+  console.log("[API] Fetching batch observations:", seriesIds.length, "series, limit:", limit);
+  return apiFetch<Record<string, { observations: Array<{ date: string; value: string }> }>>(`/fred/batch-observations`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ seriesIds, limit, frequencyMap }),
   }).then(data => {
-    console.log("📦 Batch response received, type:", typeof data);
-    console.log("📦 Response keys:", Object.keys(data || {}).length, "series");
-    console.log("📦 First few keys:", Object.keys(data || {}).slice(0, 5));
+    console.log("[API] Batch response received, type:", typeof data);
+    console.log("[API] Response keys:", Object.keys(data || {}).length, "series");
+    console.log("[API] First few keys:", Object.keys(data || {}).slice(0, 5));
     return data;
   }).catch(err => {
-    console.error("❌ Batch fetch error:", err);
+    console.error("[API] Batch fetch error:", err);
     throw err;
   });
 }

@@ -31,8 +31,8 @@ export function useMarketCloud(): UseMarketCloudResult {
 
   const fetchAll = useCallback(async () => {
     try {
-      console.log("🔄 useMarketCloud: Starting fetchAll...");
-      console.log("📊 Total series to fetch:", ALL_SERIES_IDS.length);
+      console.log("[MarketCloud] Starting fetchAll...");
+      console.log("[MarketCloud] Total series to fetch:", ALL_SERIES_IDS.length);
       setLoading(true);
       setError(null);
 
@@ -43,13 +43,13 @@ export function useMarketCloud(): UseMarketCloudResult {
       }
 
       const batchData = await fetchBatchObservations(ALL_SERIES_IDS, 25, frequencyMap);
-      console.log("✅ Batch data received:", Object.keys(batchData).length, "series");
+      console.log("[MarketCloud] Batch data received:", Object.keys(batchData).length, "series");
 
       const generated: MarketPotential[] = [];
       for (const entry of SERIES_CATALOG) {
         const seriesData = batchData[entry.seriesId];
         if (!seriesData?.observations) {
-          console.log("⚠️ No data for:", entry.seriesId);
+          console.log("[MarketCloud] No data for:", entry.seriesId);
           continue;
         }
 
@@ -57,18 +57,18 @@ export function useMarketCloud(): UseMarketCloudResult {
         if (potential) {
           generated.push(potential);
         } else {
-          console.log("❌ Failed to generate potential for:", entry.seriesId);
+          console.log("[MarketCloud] Failed to generate potential for:", entry.seriesId);
         }
       }
 
-      console.log("🎯 Generated potentials:", generated.length);
+      console.log("[MarketCloud] Generated potentials:", generated.length);
       setPotentials(generated);
     } catch (err) {
-      console.error("💥 useMarketCloud error:", err);
+      console.error("[MarketCloud] Error:", err);
       setError(err instanceof Error ? err.message : "Failed to load market data");
     } finally {
       setLoading(false);
-      console.log("🏁 useMarketCloud: fetchAll complete");
+      console.log("[MarketCloud] fetchAll complete");
     }
   }, []);
 

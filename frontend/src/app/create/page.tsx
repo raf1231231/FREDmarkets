@@ -22,7 +22,7 @@ export default function CreateMarketPage() {
     categoryCounts,
   } = useMarketCloud();
 
-  console.log("🎨 CreateMarketPage render:", {
+  console.log("[CreateMarketPage] Render:", {
     loading,
     error,
     activeCategory,
