@@ -53,4 +53,20 @@ pub mod fred_markets {
     ) -> Result<()> {
         initialize_order_book::handler(ctx, outcome_index)
     }
+
+    /// Mints one token of each outcome in exchange for USDC.
+    pub fn mint_complete_set(
+        ctx: Context<MintCompleteSet>,
+        params: MintCompleteSetParams,
+    ) -> Result<()> {
+        mint_complete_set::handler(ctx, params)
+    }
+
+    /// Redeems one of each outcome token for USDC.
+    pub fn redeem_complete_set(
+        ctx: Context<RedeemCompleteSet>,
+        params: RedeemCompleteSetParams,
+    ) -> Result<()> {
+        redeem_complete_set::handler(ctx, params)
+    }
 }
