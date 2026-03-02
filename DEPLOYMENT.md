@@ -33,7 +33,8 @@ vercel
    - **Install Command**: `npm install`
 
 4. Add Environment Variables (in Vercel dashboard):
-   - `NEXT_PUBLIC_API_BASE_URL` = Your backend URL (see below)
+   - `NEXT_PUBLIC_API_BASE_URL` = Your Railway backend URL (e.g. `https://fredmarkets.up.railway.app/api`)
+   - `NEXT_PUBLIC_RPC_ENDPOINT` = `https://api.devnet.solana.com` (devnet) or paid RPC for mainnet
 
 5. Click "Deploy"
 
@@ -52,12 +53,15 @@ railway up
 ```
 
 Then add these environment variables in Railway dashboard:
-- `DATABASE_URL` = Your Supabase pooler URL
-- `DIRECT_URL` = Your Supabase direct URL
-- `FRED_API_KEY` = Your FRED API key
+- `DATABASE_URL` = Your Neon connection string (see RAILWAY_DEPLOYMENT.md)
+- `FRED_API_KEY` = Your FRED API key (get free at https://fred.stlouisfed.org/docs/api/api_key.html)
+- `FRONTEND_URL` = Your Vercel frontend URL
 - `PORT` = 3001
 - `NODE_ENV` = production
-- `FRONTEND_URL` = Your Vercel frontend URL
+- `ORACLE_KEYPAIR` = Base64-encoded oracle keypair (see backend/.env.example)
+- `SOLANA_RPC_URL` = `https://api.devnet.solana.com` (or paid RPC for mainnet)
+- `FRED_MARKETS_PROGRAM_ID` = `GaK745UiF6FMZt5hXbCrKQrhmdcmRx8SYi3AdfFshMBo`
+- `ORACLE_CRON_SCHEDULE` = `*/15 * * * *`
 
 ### Option 2: Render
 1. Go to https://render.com
@@ -66,7 +70,7 @@ Then add these environment variables in Railway dashboard:
 4. Configure:
    - **Root Directory**: `backend`
    - **Build Command**: `npm install && npx prisma generate`
-   - **Start Command**: `npm start`
+   - **Start Command**: `npx prisma migrate deploy && npm start`
 5. Add environment variables (same as Railway)
 
 ### Option 3: Fly.io
@@ -83,15 +87,26 @@ fly deploy
 ## Environment Variables Summary
 
 ### Frontend (Vercel):
-- `NEXT_PUBLIC_API_BASE_URL` = https://your-backend.railway.app
+```env
+NEXT_PUBLIC_API_BASE_URL=https://your-backend.up.railway.app/api
+NEXT_PUBLIC_RPC_ENDPOINT=https://api.devnet.solana.com
+```
 
-### Backend (Railway/Render/Fly):
-- `DATABASE_URL` = postgresql://postgres.hmcywjqvfepxwlqdeita:...@aws-0-us-west-2.pooler.supabase.com:6543/postgres
-- `DIRECT_URL` = postgresql://postgres.hmcywjqvfepxwlqdeita:...@aws-0-us-west-2.pooler.supabase.com:5432/postgres
-- `FRED_API_KEY` = cefea4662a2255e23e53c9b27af27b84
-- `PORT` = 3001
-- `NODE_ENV` = production
-- `FRONTEND_URL` = https://your-app.vercel.app
+### Backend (Railway):
+```env
+DATABASE_URL=postgresql://[user]:[password]@[endpoint].neon.tech/neondb?sslmode=require
+FRED_API_KEY=your_fred_api_key_here
+PORT=3001
+NODE_ENV=production
+FRONTEND_URL=https://your-app.vercel.app
+ORACLE_KEYPAIR=<base64-encoded-64-byte-keypair>
+SOLANA_RPC_URL=https://api.devnet.solana.com
+FRED_MARKETS_PROGRAM_ID=GaK745UiF6FMZt5hXbCrKQrhmdcmRx8SYi3AdfFshMBo
+ORACLE_CRON_SCHEDULE=*/15 * * * *
+ORACLE_ADMIN_SECRET=<openssl rand -hex 32>
+```
+
+See `backend/.env.example` for full documentation of each variable.
 
 ## Post-Deployment Steps
 
@@ -111,8 +126,10 @@ cd ../backend && railway up
 
 # 3. Update frontend env with backend URL
 # Go to Vercel dashboard → Settings → Environment Variables
-# Add: NEXT_PUBLIC_API_BASE_URL = <your-railway-url>
+# Add: NEXT_PUBLIC_API_BASE_URL = <your-railway-url>/api
 
 # 4. Redeploy frontend
-vercel --prod
+cd frontend && vercel --prod
 ```
+
+For a detailed step-by-step guide see **RAILWAY_DEPLOYMENT.md**.

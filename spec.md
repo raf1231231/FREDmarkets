@@ -40,7 +40,7 @@ Decentralized prediction market platform using FRED economic data as oracle. Use
 
 ### Infrastructure
 - [x] Oracle relay service (FRED data to on-chain resolution)
-- [ ] Infrastructure deployment (Neon + Railway + Vercel)
+- [x] Infrastructure deployment (Neon + Railway + Vercel)
 - [ ] Frontend wired to live smart contract
 
 
