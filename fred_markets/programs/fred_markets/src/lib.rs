@@ -69,4 +69,29 @@ pub mod fred_markets {
     ) -> Result<()> {
         redeem_complete_set::handler(ctx, params)
     }
+
+    /// Places a limit order (bid or ask) with auto-fill against existing orders.
+    pub fn place_order(
+        ctx: Context<PlaceOrder>,
+        outcome_index: u8,
+        side: u8, // 0 = Bid, 1 = Ask
+        price_bps: u16,
+        amount: u64,
+    ) -> Result<u64> {
+        let side = if side == 0 {
+            crate::state::order_book::OrderSide::Bid
+        } else {
+            crate::state::order_book::OrderSide::Ask
+        };
+        place_order::handler(ctx, outcome_index, side, price_bps, amount)
+    }
+
+    /// Cancels a resting order and returns collateral.
+    pub fn cancel_order(
+        ctx: Context<CancelOrder>,
+        outcome_index: u8,
+        order_id: u64,
+    ) -> Result<u64> {
+        cancel_order::handler(ctx, outcome_index, order_id)
+    }
 }

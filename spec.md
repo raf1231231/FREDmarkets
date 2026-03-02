@@ -1,3 +1,52 @@
+---
+title: FREDmarkets
+status: active
+created: 2026-01-15
+agents: [colin]
+---
+
+Decentralized prediction market platform using FRED economic data as oracle. Users bet on real-world economic outcomes (CPI, unemployment, etc.) via Solana smart contracts.
+
+## Goals
+
+### Frontend
+- [x] Market Cloud visualization (100-node force-directed graph)
+- [x] MarketCard, MarketCalendar, and outcome bracket display
+- [x] Category filters and responsive frontend design
+- [x] Anchor provider setup and program client skeleton
+
+### Backend
+- [x] FRED API proxy with all endpoints
+- [x] Batch series endpoint
+- [x] Neon PostgreSQL database with Prisma schema
+- [x] Rate limiting (100 req/15min)
+- [x] Health check endpoint
+
+### Smart Contract Phase 0-1
+- [x] initialize_platform (Phase 0)
+- [x] propose_market, claim_market, initialize_outcome_mint, initialize_order_book (Phase 1)
+
+### Smart Contract Phase 2-3
+- [x] mint_complete_set (Phase 2)
+- [x] redeem_complete_set (Phase 2)
+- [ ] place_order with auto-fill (Phase 3)
+- [ ] cancel_order (Phase 3)
+
+### Smart Contract Phase 4-5
+- [ ] close_market and resolve_market (Phase 4)
+- [ ] claim_winnings with fee logic (Phase 4)
+- [ ] claim_creator_fees (Phase 4)
+- [ ] clear_order_book cranker (Phase 5)
+
+### Infrastructure
+- [ ] Oracle relay service (FRED data to on-chain resolution)
+- [ ] Infrastructure deployment (Neon + Railway + Vercel)
+- [ ] Frontend wired to live smart contract
+
+
+---
+
+
 # FREDmarkets — Technical Specification
 > **For Colin Code (Minimax 2.5):** This document is your implementation guide. Work top-down. All paths are relative to `~/.openclaw/projects/FREDmarkets/`. Always read existing files before modifying them. The smart contract has strict build constraints — do not deviate from them (Section 7.3).
 

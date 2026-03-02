@@ -70,7 +70,7 @@ pub enum FredMarketsError {
 
     // Outcome
     #[msg("Invalid outcome index — must be less than num_outcomes")]
-    InvalidOutcome,
+    InvalidOutcomeIndex,
 
     // Admin
     #[msg("Treasury account does not match platform config")]
@@ -79,4 +79,20 @@ pub enum FredMarketsError {
     // Math
     #[msg("Math overflow")]
     MathOverflow,
+
+    // Order book
+    #[msg("Invalid price: must be 1-9999 bps")]
+    InvalidPrice,
+    #[msg("Invalid amount: must be greater than 0")]
+    InvalidAmount,
+    #[msg("Insufficient funds for order")]
+    InsufficientFunds,
+    #[msg("Insufficient outcome tokens")]
+    InsufficientOutcomeTokens,
+    #[msg("Overflow occurred")]
+    Overflow,
+
+    // Authorization
+    #[msg("Unauthorized: account owner does not match")]
+    Unauthorized,
 }

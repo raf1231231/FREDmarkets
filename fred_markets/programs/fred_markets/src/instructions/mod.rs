@@ -5,6 +5,8 @@ pub mod initialize_outcome_mint;
 pub mod initialize_order_book;
 pub mod mint_complete_set;
 pub mod redeem_complete_set;
+pub mod place_order;
+pub mod cancel_order;
 
 // Re-export types (Accounts structs, Params). Handlers are called via qualified
 // paths (e.g., propose_market::handler) so the ambiguous glob is harmless.
@@ -16,3 +18,5 @@ pub use initialize_outcome_mint::*;
 pub use initialize_order_book::*;
 pub use mint_complete_set::*;
 pub use redeem_complete_set::*;
+pub use place_order::*;
+pub use cancel_order::*;
