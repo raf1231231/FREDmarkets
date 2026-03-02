@@ -5,6 +5,8 @@ import { CLOUD_CATEGORIES } from "@/data/seriesCatalog";
 import type { MarketPotential, SponsorFormState } from "@/types/cloud";
 import InteractiveSparkline from "@/components/fred/InteractiveSparkline";
 import SponsorForm from "./SponsorForm";
+import { useSponsorMarket } from "@/hooks/useSponsorMarket";
+import { explorerUrl } from "@/lib/constants";
 
 interface SponsorModalProps {
   potential: MarketPotential;
@@ -16,14 +18,17 @@ export default function SponsorModal({ potential, onClose }: SponsorModalProps) 
     potential;
   const categoryMeta = CLOUD_CATEGORIES[entry.category];
 
-  // Close on Escape
+  const { sponsor, status, error, txSignatures, marketPda, reset } = useSponsorMarket();
+
+  // Close on Escape (unless a transaction is in progress)
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
+      const inProgress = ["proposing", "claiming", "initMints", "initOrderBooks"].includes(status);
+      if (e.key === "Escape" && !inProgress) onClose();
     }
     document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
-  }, [onClose]);
+  }, [onClose, status]);
 
   // Lock body scroll
   useEffect(() => {
@@ -122,11 +127,22 @@ export default function SponsorModal({ potential, onClose }: SponsorModalProps) 
     }
   })();
 
-  function handleSubmit(state: SponsorFormState) {
-    // TODO: Wire to useSponsorMarket hook for on-chain transaction
-    console.log("Sponsor submitted:", state);
-    onClose();
+  async function handleSubmit(state: SponsorFormState) {
+    try {
+      await sponsor(state);
+    } catch {
+      // error already stored in hook state — stay open so user can see it
+    }
   }
+
+  const statusLabels: Record<string, string> = {
+    proposing: "Proposing market… (1/4)",
+    claiming: "Claiming market & funding vault… (2/4)",
+    initMints: "Creating outcome token mints… (3/4)",
+    initOrderBooks: "Creating order books… (4/4)",
+    complete: "Market created!",
+    error: "Transaction failed",
+  };
 
   const frequencyLabels: Record<string, string> = {
     daily: "Daily",
@@ -244,12 +260,90 @@ export default function SponsorModal({ potential, onClose }: SponsorModalProps) 
             </p>
           </div>
 
-          {/* Right: Sponsor form */}
+          {/* Right: Sponsor form / tx status */}
           <div className="md:w-1/2 px-6 py-5">
-            <h3 className="text-sm font-semibold text-fred-gray-800 mb-4">
-              Sponsor this market
-            </h3>
-            <SponsorForm potential={potential} onSubmit={handleSubmit} />
+            {status === "idle" || status === "error" ? (
+              <>
+                <h3 className="text-sm font-semibold text-fred-gray-800 mb-4">
+                  Sponsor this market
+                </h3>
+                {error && (
+                  <div className="mb-3 px-3 py-2 rounded bg-red-50 border border-red-200 text-xs text-red-700">
+                    {error}
+                  </div>
+                )}
+                <SponsorForm potential={potential} onSubmit={handleSubmit} />
+              </>
+            ) : status === "complete" ? (
+              /* ── Success state ──────────────────────────────── */
+              <div className="flex flex-col items-center justify-center h-full py-8 text-center">
+                <div className="text-3xl mb-3">✅</div>
+                <h3 className="text-base font-bold text-fred-navy mb-2">
+                  Market Created!
+                </h3>
+                <p className="text-xs text-fred-gray-600 mb-4">
+                  Your market is live on Solana. It will appear in the Markets
+                  list once the transaction confirms.
+                </p>
+                {marketPda && (
+                  <a
+                    href={`/markets/${marketPda}`}
+                    className="text-xs text-fred-link underline hover:no-underline mb-2 block"
+                  >
+                    View market →
+                  </a>
+                )}
+                <div className="w-full mt-4 space-y-1">
+                  {txSignatures.map((sig, i) => (
+                    <a
+                      key={sig}
+                      href={explorerUrl(sig)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[10px] font-mono text-fred-gray-500 hover:text-fred-link flex items-center justify-between"
+                    >
+                      <span>tx {i + 1}</span>
+                      <span className="underline">
+                        {sig.slice(0, 8)}…{sig.slice(-4)}
+                      </span>
+                    </a>
+                  ))}
+                </div>
+                <button
+                  onClick={() => { reset(); onClose(); }}
+                  className="mt-5 px-4 py-2 rounded-[5px] text-sm font-semibold bg-fred-navy text-white hover:bg-fred-blue transition-colors"
+                >
+                  Close
+                </button>
+              </div>
+            ) : (
+              /* ── In-progress state ─────────────────────────── */
+              <div className="flex flex-col items-center justify-center h-full py-8 text-center">
+                <div className="w-8 h-8 border-2 border-fred-blue border-t-transparent rounded-full animate-spin mb-4" />
+                <p className="text-sm font-medium text-fred-navy mb-1">
+                  {statusLabels[status]}
+                </p>
+                <p className="text-xs text-fred-gray-600 mb-4">
+                  Approve each transaction in your wallet.
+                </p>
+                <div className="w-full space-y-1">
+                  {txSignatures.map((sig, i) => (
+                    <a
+                      key={sig}
+                      href={explorerUrl(sig)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[10px] font-mono text-green-600 flex items-center justify-between"
+                    >
+                      <span>✓ tx {i + 1} confirmed</span>
+                      <span className="underline">
+                        {sig.slice(0, 8)}…{sig.slice(-4)}
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
