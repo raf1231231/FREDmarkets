@@ -2,11 +2,11 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import cron from "node-cron";
 import { config } from "./config";
 import routes from "./routes";
 import { errorHandler } from "./middleware/error";
-import { warmCache } from "./services/fred";
-import { ALL_SERIES_IDS, FREQUENCY_MAP } from "./config/seriesCatalog";
+import { initOracle, runOracleCycle } from "./services/oracle";
 
 const app = express();
 
@@ -27,10 +27,21 @@ app.listen(config.port, () => {
     `[FREDmarkets API] Running on http://localhost:${config.port} (${config.nodeEnv})`
   );
 
-  // Note: Cache warming disabled to avoid FRED API rate limits on startup
-  // Cache will be populated lazily as requests come in
-  // Data cached for 24 hours (1 hour for daily series) to minimize API calls
+  // FRED cache: populated lazily as requests come in (24 hr TTL)
   console.log("📋 Lazy cache mode: FRED data will be cached as requested (24hr TTL)");
+
+  // Oracle relay: initialize + schedule cron
+  const oracleEnabled = initOracle();
+  if (oracleEnabled) {
+    cron.schedule(config.oracleCronSchedule, async () => {
+      try {
+        await runOracleCycle();
+      } catch (err: any) {
+        console.error("❌ Oracle cron error:", err.message);
+      }
+    });
+    console.log(`⏰ Oracle cron scheduled: ${config.oracleCronSchedule}`);
+  }
 });
 
 export default app;
