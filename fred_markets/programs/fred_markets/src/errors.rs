@@ -95,4 +95,8 @@ pub enum FredMarketsError {
     // Authorization
     #[msg("Unauthorized: account owner does not match")]
     Unauthorized,
+
+    // Cranker
+    #[msg("Provide one writable USDC token account per active bid in remaining_accounts")]
+    MissingMakerAccounts,
 }

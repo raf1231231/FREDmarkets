@@ -29,14 +29,14 @@ Decentralized prediction market platform using FRED economic data as oracle. Use
 ### Smart Contract Phase 2-3
 - [x] mint_complete_set (Phase 2)
 - [x] redeem_complete_set (Phase 2)
-- [ ] place_order with auto-fill (Phase 3)
-- [ ] cancel_order (Phase 3)
+- [x] place_order with auto-fill (Phase 3)
+- [x] cancel_order (Phase 3)
 
 ### Smart Contract Phase 4-5
-- [ ] close_market and resolve_market (Phase 4)
-- [ ] claim_winnings with fee logic (Phase 4)
-- [ ] claim_creator_fees (Phase 4)
-- [ ] clear_order_book cranker (Phase 5)
+- [x] close_market and resolve_market (Phase 4)
+- [x] claim_winnings with fee logic (Phase 4)
+- [x] claim_creator_fees (Phase 4)
+- [x] clear_order_book cranker (Phase 5)
 
 ### Infrastructure
 - [ ] Oracle relay service (FRED data to on-chain resolution)

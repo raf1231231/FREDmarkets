@@ -94,4 +94,47 @@ pub mod fred_markets {
     ) -> Result<u64> {
         cancel_order::handler(ctx, outcome_index, order_id)
     }
+
+    /// Closes trading on a market - transitions from Active to Closed
+    pub fn close_market(
+        ctx: Context<CloseMarket>,
+    ) -> Result<()> {
+        close_market::handler(ctx)
+    }
+
+    /// Resolves a market - sets the winning outcome (oracle only)
+    pub fn resolve_market(
+        ctx: Context<ResolveMarket>,
+        outcome_index: u8,
+        resolution_value: i64,
+        resolution_timestamp: i64,
+    ) -> Result<()> {
+        resolve_market::handler(ctx, outcome_index, resolution_value, resolution_timestamp)
+    }
+
+    /// Claims winnings - redeems winning tokens for USDC minus fees
+    pub fn claim_winnings(
+        ctx: Context<ClaimWinnings>,
+        outcome_index: u8,
+        amount: u64,
+    ) -> Result<u64> {
+        claim_winnings::handler(ctx, outcome_index, amount)
+    }
+
+    /// Claims creator fees - creator withdraws accumulated fee revenue
+    pub fn claim_creator_fees(
+        ctx: Context<ClaimCreatorFees>,
+    ) -> Result<u64> {
+        claim_creator_fees::handler(ctx)
+    }
+
+    /// Emergency cranker: cancels all resting orders in an outcome's order book
+    /// and refunds USDC collateral to bid makers. Platform authority only.
+    /// Market must be Closed, Resolved, Cancelled, or Expired.
+    pub fn clear_order_book(
+        ctx: Context<ClearOrderBook>,
+        outcome_index: u8,
+    ) -> Result<()> {
+        clear_order_book::handler(ctx, outcome_index)
+    }
 }

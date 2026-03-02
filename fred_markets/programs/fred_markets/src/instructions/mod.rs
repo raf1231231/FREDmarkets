@@ -7,6 +7,11 @@ pub mod mint_complete_set;
 pub mod redeem_complete_set;
 pub mod place_order;
 pub mod cancel_order;
+pub mod close_market;
+pub mod resolve_market;
+pub mod claim_winnings;
+pub mod claim_creator_fees;
+pub mod clear_order_book;
 
 // Re-export types (Accounts structs, Params). Handlers are called via qualified
 // paths (e.g., propose_market::handler) so the ambiguous glob is harmless.
@@ -20,3 +25,8 @@ pub use mint_complete_set::*;
 pub use redeem_complete_set::*;
 pub use place_order::*;
 pub use cancel_order::*;
+pub use close_market::*;
+pub use resolve_market::*;
+pub use claim_winnings::*;
+pub use claim_creator_fees::*;
+pub use clear_order_book::*;
