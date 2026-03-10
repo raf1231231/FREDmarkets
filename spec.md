@@ -422,17 +422,8 @@ cargo clean && anchor build
 
 | # | Task | Complexity | Phase |
 |---|------|-----------|-------|
-| **1** | `mint_complete_set` instruction | Medium | Phase 2 |
-| **2** | `redeem_complete_set` instruction | Medium | Phase 2 |
-| **3** | `place_order` instruction (with auto-fill) | High | Phase 3 |
-| **4** | `cancel_order` instruction | Low | Phase 3 |
-| **5** | `close_market`, `resolve_market` | Medium | Phase 4 |
-| **6** | `claim_winnings` (with fee logic) | Medium | Phase 4 |
-| **7** | `claim_creator_fees` | Low | Phase 4 |
-| **8** | `clear_order_book` (cranker) | Low | Phase 5 |
-| **9** | Oracle relay service | High | Off-chain |
-| **10** | Infrastructure deployment (Neon/Railway/Vercel) | Medium | DevOps |
-| **11** | Frontend wired to contract (beyond skeleton) | High | Integration |
+| **1** | Oracle relay service | High | Off-chain |
+| **2** | Frontend wired to contract (beyond skeleton) | High | Integration |
 
 ---
 
