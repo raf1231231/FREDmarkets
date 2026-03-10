@@ -89,6 +89,7 @@ export function decodeMarketDetail(
   // Anchor 0.30.x serializes Rust Option<T> as: null (None) or the value directly (Some)
   const winningOutcome = account.winningOutcome as number | null;
   const resolvedAt = account.resolvedAt as BN | null;
+  const initializedOutcomes = account.initializedOutcomes as number;
 
   return {
     ...summary,
@@ -101,6 +102,7 @@ export function decodeMarketDetail(
     winningOutcome: winningOutcome ?? null,
     createdAt: (account.createdAt as BN).toNumber(),
     resolvedAt: resolvedAt ? resolvedAt.toNumber() : null,
+    initializedOutcomes,
   };
 }
 
