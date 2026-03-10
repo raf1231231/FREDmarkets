@@ -1,6 +1,6 @@
 ---
 title: FREDmarkets
-status: active
+status: complete
 created: 2026-01-15
 agents: [colin]
 ---
