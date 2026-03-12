@@ -17,16 +17,16 @@ export function fetchMarkets(params?: { status?: string; page?: number; limit?: 
   if (params?.page) qs.set("page", String(params.page));
   if (params?.limit) qs.set("limit", String(params.limit));
   const query = qs.toString();
-  return apiFetch<any>(`/markets${query ? `?${query}` : ""}`);
+  return apiFetch<unknown>(`/markets${query ? `?${query}` : ""}`);
 }
 
 export function fetchMarket(id: string) {
-  return apiFetch<any>(`/markets/${id}`);
+  return apiFetch<unknown>(`/markets/${id}`);
 }
 
 // FRED proxy
 export function searchFredSeries(query: string, limit = 20) {
-  return apiFetch<any>(`/fred/search?q=${encodeURIComponent(query)}&limit=${limit}`);
+  return apiFetch<unknown>(`/fred/search?q=${encodeURIComponent(query)}&limit=${limit}`);
 }
 
 export function fetchFredSeries(seriesId: string) {

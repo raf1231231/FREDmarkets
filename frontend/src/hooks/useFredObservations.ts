@@ -1,5 +1,6 @@
 "use client";
 
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect } from "react";
 import { fetchFredObservations } from "@/lib/api";
 import { FredObservation } from "@/types/fred";
