@@ -137,9 +137,10 @@ export function initOracle(): boolean {
       `   RPC       : ${rpcUrl}`
     );
     return true;
-  } catch (err: any) {
-    _lastError = `Init failed: ${err.message}`;
-    console.error("❌ Oracle init failed:", err.message);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    _lastError = `Init failed: ${message}`;
+    console.error("❌ Oracle init failed:", message);
     return false;
   }
 }
@@ -192,10 +193,11 @@ export async function runOracleCycle(): Promise<OracleCycleResult> {
     await resolveReadyMarkets(result);
     _lastRunAt = new Date();
     _lastError = null;
-  } catch (err: any) {
-    _lastError = err.message;
-    result.errors.push({ type: "cycle_fatal", error: err.message });
-    console.error("❌ Oracle cycle fatal:", err.message);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    _lastError = message;
+    result.errors.push({ type: "cycle_fatal", error: message });
+    console.error("❌ Oracle cycle fatal:", message);
   } finally {
     _isRunning = false;
   }
@@ -250,14 +252,15 @@ async function closeExpiredMarkets(result: OracleCycleResult): Promise<void> {
 
       console.log(`  ✅ Closed ${short(market.id)} | tx: ${tx}`);
       result.closedMarkets.push({ marketId: market.id, tx });
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
       // If the market is already not-Active on-chain, sync DB and move on
-      if (isStateError(err, "MarketNotActive", 6003)) {
+      if (isStateError(err as any, "MarketNotActive", 6003)) {
         await syncMarketStatus(market.id).catch(() => {});
         console.log(`  ℹ️  ${short(market.id)} already past Active on-chain — DB synced`);
       } else {
-        console.error(`  ❌ close_market ${short(market.id)}: ${err.message}`);
-        result.errors.push({ type: "close_market", marketId: market.id, error: err.message });
+        console.error(`  ❌ close_market ${short(market.id)}: ${message}`);
+        result.errors.push({ type: "close_market", marketId: market.id, error: message });
       }
     }
   }
@@ -351,14 +354,15 @@ async function resolveReadyMarkets(result: OracleCycleResult): Promise<void> {
         winningOutcome,
         tx,
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
       // Market may already be resolved on-chain (e.g. resolved by another party)
-      if (isStateError(err, "MarketNotClosed", 6004) || isStateError(err, "MarketAlreadyResolved", 6007)) {
+      if (isStateError(err as any, "MarketNotClosed", 6004) || isStateError(err as any, "MarketAlreadyResolved", 6007)) {
         await syncMarketStatus(market.id).catch(() => {});
         console.log(`  ℹ️  ${short(market.id)} already resolved on-chain — DB synced`);
       } else {
-        console.error(`  ❌ resolve_market ${short(market.id)}: ${err.message}`);
-        result.errors.push({ type: "resolve_market", marketId: market.id, error: err.message });
+        console.error(`  ❌ resolve_market ${short(market.id)}: ${message}`);
+        result.errors.push({ type: "resolve_market", marketId: market.id, error: message });
       }
     }
   }
@@ -416,12 +420,14 @@ async function fetchFredObservation(
     }
 
     return obs ? parseFloat(obs.value) : null;
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    const axiosErr = err as { response?: { status?: number } };
     // 404 from FRED API means the series or observation doesn't exist yet
-    if (err.response?.status === 400 || err.response?.status === 404) {
+    if (axiosErr.response?.status === 400 || axiosErr.response?.status === 404) {
       return null;
     }
-    console.error(`  FRED API error for ${seriesId}:`, err.message);
+    console.error(`  FRED API error for ${seriesId}:`, message);
     return null;
   }
 }

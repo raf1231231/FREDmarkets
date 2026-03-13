@@ -36,8 +36,9 @@ app.listen(config.port, () => {
     cron.schedule(config.oracleCronSchedule, async () => {
       try {
         await runOracleCycle();
-      } catch (err: any) {
-        console.error("❌ Oracle cron error:", err.message);
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err);
+        console.error("❌ Oracle cron error:", message);
       }
     });
     console.log(`⏰ Oracle cron scheduled: ${config.oracleCronSchedule}`);
