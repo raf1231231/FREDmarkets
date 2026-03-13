@@ -111,7 +111,6 @@ export const SERIES_CATALOG = [
   { seriesId: "CUUR0000SETG01", frequency: "monthly" },
 
   // HOUSING
-  { seriesId: "CUUR0000SEHA", frequency: "monthly" },
   { seriesId: "MSPUS", frequency: "quarterly" },
   { seriesId: "RHORUSQ156N", frequency: "quarterly" },
   { seriesId: "RRVRUSQ156N", frequency: "quarterly" },
