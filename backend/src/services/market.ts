@@ -41,5 +41,6 @@ function serializeMarket(market: any) {
     ...market,
     marketId: market.marketId.toString(),
     totalSetsMinted: market.totalSetsMinted.toString(),
+    proposer: market.proposer,
   };
 }

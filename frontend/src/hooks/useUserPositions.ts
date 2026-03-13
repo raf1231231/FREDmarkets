@@ -124,14 +124,14 @@ export function useUserPositions(
           }
         }
 
-        // Filter for creator markets — we don't have proposer in MarketSummary,
-        // so this would require fetching MarketDetail. For now, expose all markets
-        // and let the portfolio page show a message.
-        // TODO: Include proposer in MarketSummary for efficient creator filtering.
+        // Filter for creator markets using proposer field from MarketSummary
+        const creatorMarketsFiltered = markets.filter(
+          (m) => m.proposer === publicKey?.toBase58()
+        );
 
         if (!cancelled) {
           setPositions(positionsFound);
-          setCreatorMarkets([]); // populated when MarketDetail is available
+          setCreatorMarkets(creatorMarketsFiltered);
         }
       } catch (err) {
         if (cancelled) return;

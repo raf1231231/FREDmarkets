@@ -20,6 +20,7 @@ export interface MarketSummary {
   closesAt: number;   // unix timestamp
   resolvesAt: number;
   totalSetsMinted: string;
+  proposer: string;
 }
 
 export interface MarketDetail extends MarketSummary {

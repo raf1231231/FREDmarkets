@@ -72,6 +72,7 @@ export function decodeMarketSummary(
     closesAt: (account.closesAt as BN).toNumber(),
     resolvesAt: (account.resolvesAt as BN).toNumber(),
     totalSetsMinted: (account.totalSetsMinted as BN).toString(),
+    proposer: (account.proposer as { toBase58(): string }).toBase58(),
   };
 }
 
